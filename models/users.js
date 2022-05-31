@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-import cartSchema from './cart';
+const cartSchema = require('./cart');
 
 
 const userSchema = new mongoose.Schema({
@@ -18,6 +18,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 5,
         maxlength: 150,
+        trim: true,
+        lowercase: true,
     },
     password: {
         type: String,
@@ -25,7 +27,7 @@ const userSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 255,
     },
-    addres: {
+    address: {
         city: {
             type: String,
             required: true,
@@ -53,10 +55,23 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    }
 });
 
+// capitalize first letter of each name from name
+userSchema.pre('save', function (next) {
+    const words = this.name.split(' ')
+    this.name = words
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join(' ')
+    next()
+  })
+
 userSchema.methods.generateAuthToken = function() {
-    const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+    const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
     return token;
 };
 
@@ -77,7 +92,7 @@ function validateUser(user) {
         email: Joi.string().min(5).max(255).required().email(),
         password: Joi.string().min(5).max(150).required(),
         confirmPassword: Joi.string().required().valid(Joi.ref('password')),
-        addres: {
+        address: {
             city: Joi.string().min(3).max(100).required(),
             county: Joi.string().min(3).max(100).required(),
             street: Joi.string().min(3).max(255).required(),

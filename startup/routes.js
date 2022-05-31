@@ -1,6 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require('cookie-parser')
+const users = require("../routes/users")
+const auth = require("../routes/auth");
+const products = require("../routes/products");
+const genres = require("../routes/genres");
+const cart = require("../routes/cart");
 
 const corsOptions = {
     exposedHeaders: 'Authorization',
@@ -14,4 +19,9 @@ module.exports = function(app) {
     app.use(express.json());
     app.use(cookieParser());
     app.use(cors(corsOptions));
+    app.use("/api/users", users);
+    app.use("/api/auth", auth);
+    app.use("/api/products", products);
+    app.use("/api/genres", genres);
+    app.use("/api/cart", cart);
 };
