@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const cartSchema = require('./cart');
-
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -47,10 +45,10 @@ const userSchema = new mongoose.Schema({
             maxlength: 255,
         }
     },
-    cart: {
-        type: [cartSchema],
-        default: [],
-    },
+    orders: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Order',
+    }],
     dateCreated: {
         type: Date,
         default: Date.now,
@@ -70,18 +68,13 @@ userSchema.pre('save', function (next) {
     next()
   })
 
+
+
 userSchema.methods.generateAuthToken = function() {
     const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
     return token;
 };
 
-userSchema.methods.calculateCartTotal = function() {
-    let total = 0;
-    this.cart.forEach(item => {
-        total += item.quantity * item.price;
-    });
-    return total;
-};
 
 const User = mongoose.model('User', userSchema);
 

@@ -3,7 +3,6 @@ const config = require('config');
 
 function auth(req, res, next) {
     const token = req.cookies["Authorization"];
-    console.log(token);
     if (!token) return res.status(401).send('Access denied. No token provided.');
 
     try {

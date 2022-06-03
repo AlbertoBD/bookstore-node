@@ -5,7 +5,7 @@ module.exports = function(handler) {
             await handler(req, res);
         }
         catch (ex) {
-            next(ex);
+            return res.status(400).send(ex.message);
         }
     };
 }
