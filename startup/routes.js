@@ -6,6 +6,7 @@ const auth = require("../routes/auth");
 const products = require("../routes/products");
 const genres = require("../routes/genres");
 const cart = require("../routes/cart");
+const orders = require("../routes/orders");
 
 const corsOptions = {
     exposedHeaders: 'Authorization',
@@ -26,4 +27,5 @@ module.exports = function(app) {
     app.use("/api/products", products);
     app.use("/api/genres", genres);
     app.use("/api/cart", cart);
+    app.use("/api/orders", orders);
 };

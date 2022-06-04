@@ -19,7 +19,7 @@ router.post("/", auth, cart, asyncMiddleware(async (req, res, next) => {
         user: req.user._id,
         address: user.address,
         products,
-        totalPrice
+        totalPrice,
     });
 
     user.orders.push(order._id);

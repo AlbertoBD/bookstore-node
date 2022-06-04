@@ -40,4 +40,8 @@ router.post("/", asyncMiddleware(async (req, res, next) => {
 
 }));
 
+router.post("/logout", auth, asyncMiddleware(async (req, res, next) => {
+    return res.cookie("Authorization", "").send("Logout succes");
+}));
+
 module.exports = router;

@@ -18,11 +18,16 @@ const ordersSChema = new mongoose.Schema({
             title: String,
             price: Number,
             quantity: Number,
+            image: String,
         }
     ],
     totalPrice: {
         type: Number,
         required: true,
+    },
+    date: {
+        type: Date,
+        default: Date.now
     },
     isShipped: {
         type: Boolean,

@@ -22,7 +22,8 @@ async function cart(req, res, next) {
                 _id: prod._id,
                 title: prod.title,
                 price: prod.price,
-                quantity: product.quantity
+                quantity: product.quantity,
+                image: prod.image
             });
 
             totalPrice += prod.price * product.quantity;
